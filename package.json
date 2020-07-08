@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/HeatherJLewis/busBoardJS/issues"
   },
-  "homepage": "https://github.com/HeatherJLewis/busBoardJS#readme"
+  "homepage": "https://github.com/HeatherJLewis/busBoardJS#readme",
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
 }
