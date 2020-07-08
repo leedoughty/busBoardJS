@@ -1,25 +1,27 @@
 const axios = require("axios");
+const apiCredentials = require("./apiCredentials");
 
-const getBreeds = () => {
+const BASE_URL = "https://api.tfl.gov.uk";
+const service = "/StopPoint";
+const stopCode = "/490008660N";
+const endpoint = `${BASE_URL}${service}${stopCode}/Arrivals?app_id=${apiCredentials.id}&app_key=${apiCredentials.key}`;
+
+const getLiveTimes = () => {
   try {
-    return axios.get("https://dog.ceo/api/breeds/list/all");
+    return axios.get(endpoint);
   } catch (error) {
     console.error(error);
   }
 };
 
-const countBreeds = async () => {
-  const breeds = getBreeds()
+const getBuses = () => {
+  getLiveTimes()
     .then((response) => {
-      if (response.data.message) {
-        console.log(
-          `Got ${Object.entries(response.data.message).length} breeds`
-        );
-      }
+      console.log(response);
     })
     .catch((error) => {
       console.log(error);
     });
 };
 
-countBreeds();
+getBuses();
