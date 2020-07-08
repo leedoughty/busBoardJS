@@ -4,12 +4,20 @@ const apiCredentials = require("./apiCredentials");
 const BASE_URL = "https://api.tfl.gov.uk";
 const service = "/StopPoint";
 
-const constructPath = () => {
-  return `${BASE_URL}${service}?lat=51.553935&lon=-0.144754&stoptypes=NaptanPublicBusCoachTram&radius=500&app_id=${apiCredentials.id}&app_key=${apiCredentials.key}`;
+const constructPath = (lat, lon) => {
+  return `${BASE_URL}${service}?lat=${lat}&lon=${lon}&stoptypes=NaptanPublicBusCoachTram&radius=500&app_id=${apiCredentials.id}&app_key=${apiCredentials.key}`;
 };
 
-const getBusStopsData = () => {
-  const path = constructPath();
+const getPostcodeData = (postcode) => {
+  try {
+    return axios.get(`https://api.postcodes.io/postcodes/${postcode}`);
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+};
+
+const getBusStopsData = (path) => {
   try {
     return axios.get(path);
   } catch (error) {
@@ -18,8 +26,18 @@ const getBusStopsData = () => {
   }
 };
 
-const getBusStops = () => {
-  getBusStopsData()
+const getBusStops = (postcode) => {
+  getPostcodeData(postcode)
+    .then((response) => {
+      const { longitude, latitude } = response.data.result;
+      return { longitude, latitude };
+    })
+    .then((data) => {
+      return constructPath(data.latitude, data.longitude);
+    })
+    .then((path) => {
+      return getBusStopsData(path);
+    })
     .then((response) => {
       response.data.stopPoints.forEach((el) => console.log(el.commonName));
     })
@@ -28,4 +46,4 @@ const getBusStops = () => {
     });
 };
 
-getBusStops();
+getBusStops("nw51tl");
