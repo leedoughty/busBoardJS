@@ -43,8 +43,25 @@ const getBusStops = async (postcode) => {
   }
 };
 
+const getClosestBusStops = async (postcode) => {
+  try {
+    const postcodeData = await getPostcodeData(postcode);
+    const { latitude, longitude } = postcodeData.data.result;
+    const path = constructPath(latitude, longitude);
+    const busStopsData = await getBusStopsData(path);
+    const closestTwoBusStops = busStopsData.data.stopPoints
+      .slice(0,2)
+      .map(el => el.id)
+    return closestTwoBusStops;
+
+  } catch (error) {
+    console.log("getBusStops", error);
+  }
+};
+
 getBusStops("nw51tl");
 
 module.exports = {
-  getBusStops
+  getBusStops,
+  getClosestBusStops
 };

@@ -1,9 +1,11 @@
 const busStops = require('../busStops')
+const {getLocalLiveBuses} = require('../retrieveLocalBusStops');
 
 const getBusStopsMiddleware = (request, response, next) => {
     const queryPostcode = request.query.postcode;
-    busStops.getBusStops(queryPostcode)
-        .then((data) => response.status(200).send(data))
+    busStops.getClosestBusStops(queryPostcode)
+        .then(data => getLocalLiveBuses(data))
+        .then(localFiveBusTimes => response.send(localFiveBusTimes))
 }
 
 module.exports = {
