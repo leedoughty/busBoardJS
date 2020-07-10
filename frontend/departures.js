@@ -1,5 +1,8 @@
 function myFunction() {
   let value = document.getElementById("postcode").value;
+  if (!value) {
+    return;
+  }
   fetch(`http://localhost:3000/departureBoards?postcode=${value}`)
     .then((response) => {
       return response.json();
@@ -13,7 +16,7 @@ function myFunction() {
       let strOne = "<ul>";
 
       data[busStopNames[0]].forEach((el) => {
-        strOne += `<li>${el.timeToStation} seconds: ${el.lineId} to ${el.destinationName}</li>`;
+        strOne += `<li>${el.timeToStation} minutes: ${el.lineId} to ${el.destinationName}</li>`;
       });
 
       strOne += "</ul>";
@@ -22,10 +25,12 @@ function myFunction() {
       let strTwo = "<ul>";
 
       data[busStopNames[1]].forEach((el) => {
-        strTwo += `<li>${el.timeToStation} seconds: ${el.lineId} to ${el.destinationName}</li>`;
+        strTwo += `<li>${el.timeToStation} minutes: ${el.lineId} to ${el.destinationName}</li>`;
       });
 
       strTwo += "</ul>";
       document.getElementById("busStopTwoResults").innerHTML = strTwo;
     });
 }
+
+setInterval(myFunction, 5000);
