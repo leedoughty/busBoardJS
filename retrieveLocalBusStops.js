@@ -29,7 +29,9 @@ const getLocalLiveBuses = async (stopCodeArray) => {
 
     const liveBusTimes = await Promise.all(arrayOfPromises);
 
-    const times = liveBusTimes[0].data.slice(0, 5).map((el) => {
+    console.log("LIVE BUS TIMES", liveBusTimes);
+
+    const busStopOne = liveBusTimes[0].data.slice(0, 5).map((el) => {
       return (busTimes = {
         lineId: el.lineId,
         destinationName: el.destinationName,
@@ -37,7 +39,15 @@ const getLocalLiveBuses = async (stopCodeArray) => {
       });
     });
 
-    return times;
+    const busStopTwo = liveBusTimes[1].data.slice(0, 5).map((el) => {
+      return (busTimes = {
+        lineId: el.lineId,
+        destinationName: el.destinationName,
+        timeToStation: el.timeToStation,
+      });
+    });
+
+    return (times = { busStopOne: busStopOne, busStopTwo: busStopTwo });
   } catch (error) {
     console.log("second block", error);
   }
