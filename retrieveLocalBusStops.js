@@ -39,6 +39,8 @@ const getLocalLiveBuses = async (stopCodeArray) => {
       });
     });
 
+    console.log(busStopOne);
+
     const busStopTwo = liveBusTimes[1].data.slice(0, 5).map((el) => {
       return (busTimes = {
         lineId: el.lineId,
@@ -47,7 +49,14 @@ const getLocalLiveBuses = async (stopCodeArray) => {
       });
     });
 
-    return (times = { busStopOne: busStopOne, busStopTwo: busStopTwo });
+    let entry = liveBusTimes[0].data[0];
+    let entry2 = liveBusTimes[1].data[0];
+    console.log(entry.stationName);
+
+    return (times = {
+      [entry.stationName]: busStopOne,
+      [entry2.stationName]: busStopTwo,
+    });
   } catch (error) {
     console.log("second block", error);
   }
