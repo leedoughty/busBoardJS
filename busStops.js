@@ -11,7 +11,7 @@ const constructPath = (lat, lon) => {
 };
 
 const getPostcodeData = async (postcode) => {
-  const path = `https://api.postcodes.io/postcodes/${postcode}`
+  const path = `https://api.postcodes.io/postcodes/${postcode}`;
   try {
     return await axios.get(path);
   } catch (error) {
@@ -35,8 +35,10 @@ const getBusStops = async (postcode) => {
     const { latitude, longitude } = postcodeData.data.result;
     const path = constructPath(latitude, longitude);
     const busStopsData = await getBusStopsData(path);
-    busStopsData.data.stopPoints.forEach((busStop) => console.log(busStop.commonName));
-    const localBusStops = busStopsData.data.stopPoints.map((busStop) => (busStop.commonName));
+    // busStopsData.data.stopPoints.forEach((busStop) => console.log(busStop.commonName));
+    const localBusStops = busStopsData.data.stopPoints.map(
+      (busStop) => busStop.commonName
+    );
     return localBusStops;
   } catch (error) {
     console.log("getBusStops", error);
@@ -50,10 +52,9 @@ const getClosestBusStops = async (postcode) => {
     const path = constructPath(latitude, longitude);
     const busStopsData = await getBusStopsData(path);
     const closestTwoBusStops = busStopsData.data.stopPoints
-      .slice(0,2)
-      .map(el => el.id)
+      .slice(0, 2)
+      .map((el) => el.id);
     return closestTwoBusStops;
-
   } catch (error) {
     console.log("getBusStops", error);
   }
@@ -63,5 +64,5 @@ getBusStops("nw51tl");
 
 module.exports = {
   getBusStops,
-  getClosestBusStops
+  getClosestBusStops,
 };

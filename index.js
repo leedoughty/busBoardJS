@@ -11,7 +11,7 @@ const constructPath = (stopCode) => {
 
 const getLiveTimes = async (stopCode) => {
   const path = constructPath(stopCode);
-  console.log({path});
+  // console.log({path});
 
   try {
     return await axios.get(path);
@@ -25,11 +25,11 @@ const getBuses = async (stopCode) => {
   try {
     const liveTimes = await getLiveTimes(stopCode);
     const fiveBuses = liveTimes.data.slice(0, 5);
-      fiveBuses.forEach((el) => {
-        console.log(el.lineId, el.destinationName, el.timeToStation);
-      });
+    // fiveBuses.forEach((el) => {
+    //   console.log(el.lineId, el.destinationName, el.timeToStation);
+    // });
   } catch (error) {
-      console.log("second block", error);
+    console.log("second block", error);
   }
 };
 
@@ -37,4 +37,4 @@ getBuses(stopCodeInput);
 
 module.exports = {
   getBuses,
-}
+};

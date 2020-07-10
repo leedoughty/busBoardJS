@@ -11,7 +11,7 @@ const constructPath = (stopCode) => {
 
 const getLiveTimes = async (stopCode) => {
   const path = constructPath(stopCode);
-  console.log({path});
+  // console.log({ path });
 
   try {
     return await axios.get(path);
@@ -23,22 +23,26 @@ const getLiveTimes = async (stopCode) => {
 
 const getLocalLiveBuses = async (stopCodeArray) => {
   try {
-    const arrayOfPromises = stopCodeArray.map(stopCode => getLiveTimes(stopCode))
+    const arrayOfPromises = stopCodeArray.map((stopCode) =>
+      getLiveTimes(stopCode)
+    );
 
-    const liveBusTimes = await Promise.all(arrayOfPromises)
+    const liveBusTimes = await Promise.all(arrayOfPromises);
 
-    console.log("HERE", liveBusTimes[0].data[0].lineId);
+    const times = liveBusTimes[0].data.slice(0, 5).map((el) => {
+      return (busTimes = {
+        lineId: el.lineId,
+        destinationName: el.destinationName,
+        timeToStation: el.timeToStation,
+      });
+    });
 
-    // return fiveBuses = liveBusTimes.data
-    //   .slice(0, 5)
-    //   .forEach((el) => {
-    //     console.log(el.lineId, el.destinationName, el.timeToStation)}
-    //   );
+    return times;
   } catch (error) {
-      console.log("second block", error);
+    console.log("second block", error);
   }
-}
+};
 
 module.exports = {
-  getLocalLiveBuses
-}
+  getLocalLiveBuses,
+};
