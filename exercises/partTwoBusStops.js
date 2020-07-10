@@ -1,5 +1,5 @@
 const axios = require("axios");
-const apiCredentials = require("./apiCredentials");
+const apiCredentials = require("../apiCredentials");
 
 const BASE_URL = "https://api.tfl.gov.uk";
 const stopTypes = "NaptanPublicBusCoachTram";
@@ -35,7 +35,9 @@ const getBusStops = async (postcode) => {
     const { latitude, longitude } = postcodeData.data.result;
     const path = constructPath(latitude, longitude);
     const busStopsData = await getBusStopsData(path);
-    // busStopsData.data.stopPoints.forEach((busStop) => console.log(busStop.commonName));
+    busStopsData.data.stopPoints.forEach((busStop) =>
+      console.log(busStop.commonName)
+    );
     const localBusStops = busStopsData.data.stopPoints.map(
       (busStop) => busStop.commonName
     );

@@ -1,5 +1,5 @@
 const axios = require("axios");
-const apiCredentials = require("./apiCredentials");
+const apiCredentials = require("../../apiCredentials");
 
 const BASE_URL = "https://api.tfl.gov.uk";
 const service = "/StopPoint";
@@ -19,7 +19,7 @@ const getLiveTimes = async (stopCode) => {
   }
 };
 
-const getLocalLiveBuses = async (stopCodeArray) => {
+const getNextFiveDepartureTimesForBusStops = async (stopCodeArray) => {
   try {
     const arrayOfPromises = stopCodeArray.map((stopCode) =>
       getLiveTimes(stopCode)
@@ -50,5 +50,5 @@ const getLocalLiveBuses = async (stopCodeArray) => {
 };
 
 module.exports = {
-  getLocalLiveBuses,
+  getNextFiveDepartureTimesForBusStops,
 };
