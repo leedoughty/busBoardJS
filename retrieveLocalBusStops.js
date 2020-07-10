@@ -3,7 +3,6 @@ const apiCredentials = require("./apiCredentials");
 
 const BASE_URL = "https://api.tfl.gov.uk";
 const service = "/StopPoint";
-const stopCodeInput = "/490008660N";
 
 const constructPath = (stopCode) => {
   return `${BASE_URL}${service}/${stopCode}/Arrivals?app_id=${apiCredentials.id}&app_key=${apiCredentials.key}`;
@@ -11,7 +10,6 @@ const constructPath = (stopCode) => {
 
 const getLiveTimes = async (stopCode) => {
   const path = constructPath(stopCode);
-  // console.log({ path });
 
   try {
     return await axios.get(path);
@@ -29,34 +27,23 @@ const getLocalLiveBuses = async (stopCodeArray) => {
 
     const liveBusTimes = await Promise.all(arrayOfPromises);
 
-    console.log("LIVE BUS TIMES", liveBusTimes);
-
-    const busStopOne = liveBusTimes[0].data.slice(0, 5).map((el) => {
-      return (busTimes = {
-        lineId: el.lineId,
-        destinationName: el.destinationName,
-        timeToStation: el.timeToStation,
+    const times = liveBusTimes.map((el) => {
+      return el.data.slice(0, 5).map((el) => {
+        return (busTimes = {
+          lineId: el.lineId,
+          destinationName: el.destinationName,
+          timeToStation: el.timeToStation,
+        });
       });
     });
 
-    console.log(busStopOne);
+    let firstBusStopStationName = liveBusTimes[0].data[0].stationName;
+    let secondBusStopStationName = liveBusTimes[1].data[0].stationName;
 
-    const busStopTwo = liveBusTimes[1].data.slice(0, 5).map((el) => {
-      return (busTimes = {
-        lineId: el.lineId,
-        destinationName: el.destinationName,
-        timeToStation: el.timeToStation,
-      });
-    });
-
-    let entry = liveBusTimes[0].data[0];
-    let entry2 = liveBusTimes[1].data[0];
-    console.log(entry.stationName);
-
-    return (times = {
-      [entry.stationName]: busStopOne,
-      [entry2.stationName]: busStopTwo,
-    });
+    return {
+      [firstBusStopStationName]: times[0],
+      [secondBusStopStationName]: times[1],
+    };
   } catch (error) {
     console.log("second block", error);
   }
